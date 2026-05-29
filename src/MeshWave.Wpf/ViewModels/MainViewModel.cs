@@ -20,14 +20,14 @@ public class MainViewModel : ViewModelBase
         _config = config;
         _playerService = playerService;
 
-        // Default view
-        _currentView = new SetupViewModel(_config, _libraryManager);
+        // Default view is now Library
+        _currentView = new LibraryViewModel(_libraryManager, _config, _playerService);
 
-        NavigateSetupCommand = new RelayCommand(_ => CurrentView = new SetupViewModel(_config, _libraryManager));
         NavigateLibraryCommand = new RelayCommand(_ => CurrentView = new LibraryViewModel(_libraryManager, _config, _playerService));
-        NavigateManageCommand = new RelayCommand(_ => CurrentView = new ManageMusicViewModel(_libraryManager, _config));
+        NavigateManageCommand = new RelayCommand(_ => CurrentView = new ManageMusicViewModel(_libraryManager, _config, _playerService));
         NavigatePlayerCommand = new RelayCommand(_ => CurrentView = new PlayerViewModel(_libraryManager, _playerService));
         NavigateSyncCommand = new RelayCommand(_ => CurrentView = new SyncStatusViewModel());
+        NavigateSetupCommand = new RelayCommand(_ => CurrentView = new SetupViewModel(_config, _libraryManager));
     }
 
     public object CurrentView
@@ -36,9 +36,9 @@ public class MainViewModel : ViewModelBase
         set => SetProperty(ref _currentView, value);
     }
 
-    public ICommand NavigateSetupCommand { get; }
     public ICommand NavigateLibraryCommand { get; }
     public ICommand NavigateManageCommand { get; }
     public ICommand NavigatePlayerCommand { get; }
     public ICommand NavigateSyncCommand { get; }
+    public ICommand NavigateSetupCommand { get; }
 }

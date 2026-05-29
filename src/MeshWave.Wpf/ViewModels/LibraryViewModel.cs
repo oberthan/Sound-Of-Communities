@@ -19,20 +19,22 @@ public class LibraryViewModel : ViewModelBase
     private readonly AppConfig _config;
     private readonly IMusicPlayerService _playerService;
     private string _searchText = string.Empty;
-    private List<Track> _allCommunityTracks = new();
+    private List<Track> _allTracks = new();
+    private bool _showLocalOnly;
 
     public LibraryViewModel(ILibraryManager libraryManager, AppConfig config, IMusicPlayerService playerService)
     {
         _libraryManager = libraryManager;
         _config = config;
         _playerService = playerService;
-        CommunityTracks = new ObservableCollection<Track>();
+        Tracks = new ObservableCollection<Track>();
         PlayCommand = new RelayCommand(p => PlayTrack(p as Track));
+        ToggleLocalCommand = new RelayCommand(_ => { ShowLocalOnly = !ShowLocalOnly; });
 
         _ = LoadTracksAsync();
     }
 
-    public ObservableCollection<Track> CommunityTracks { get; }
+    public ObservableCollection<Track> Tracks { get; }
 
     public string SearchText
     {
@@ -46,25 +48,38 @@ public class LibraryViewModel : ViewModelBase
         }
     }
 
+    public bool ShowLocalOnly
+    {
+        get => _showLocalOnly;
+        set
+        {
+            if (SetProperty(ref _showLocalOnly, value))
+            {
+                FilterTracks();
+            }
+        }
+    }
+
     public ICommand PlayCommand { get; }
+    public ICommand ToggleLocalCommand { get; }
 
     private async Task LoadTracksAsync()
     {
-        var tracks = await _libraryManager.GetCommunityTracksAsync(_config.UserId);
-        _allCommunityTracks = tracks.ToList();
+        var tracks = await _libraryManager.GetAllTracksAsync();
+        _allTracks = tracks.ToList();
         FilterTracks();
     }
 
     private void FilterTracks()
     {
-        var filtered = _allCommunityTracks.Where(t =>
-            string.IsNullOrEmpty(SearchText) ||
-            t.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+        var filtered = _allTracks.Where(t =>
+            (string.IsNullOrEmpty(SearchText) || t.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase)) &&
+            (!ShowLocalOnly || t.ArtistId == _config.UserId));
 
-        CommunityTracks.Clear();
+        Tracks.Clear();
         foreach (var track in filtered)
         {
-            CommunityTracks.Add(track);
+            Tracks.Add(track);
         }
     }
 

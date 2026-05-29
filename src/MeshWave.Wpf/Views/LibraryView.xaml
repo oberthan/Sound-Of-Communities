@@ -14,11 +14,19 @@
 
         <TextBlock Text="Explore Community Music" FontSize="32" FontWeight="Bold" Margin="0,0,0,20"/>
 
-        <TextBox Grid.Row="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                 Margin="0,0,0,20" Padding="10,8" Background="#2A2A2A" Foreground="White" BorderThickness="0"
-                 Tag="Search tracks..."/>
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Padding="10,8" Background="#2A2A2A" Foreground="White" BorderThickness="0"
+                     Tag="Search tracks..."/>
+            <CheckBox Grid.Column="1" Content="Show My Music Only" IsChecked="{Binding ShowLocalOnly}"
+                      Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0"/>
+        </Grid>
 
-        <ListView Grid.Row="2" ItemsSource="{Binding CommunityTracks}"
+        <ListView Grid.Row="2" ItemsSource="{Binding Tracks}"
                   Background="Transparent" BorderThickness="0" Foreground="White">
             <ListView.View>
                 <GridView>

@@ -13,7 +13,7 @@ public partial class MainWindow : Window
 
         // Poor man's DI for now
         var config = AppConfig.Load();
-        var libraryManager = new LibraryManager.LibraryManager();
+        var libraryManager = new MeshWave.LibraryManager.LibraryManager();
         var playerService = new Services.MusicPlayerService();
 
         DataContext = new MainViewModel(libraryManager, config, playerService);

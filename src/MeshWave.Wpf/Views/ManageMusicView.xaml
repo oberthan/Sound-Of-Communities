@@ -14,9 +14,12 @@
 
         <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
             <TextBlock Text="My Uploads" FontSize="32" FontWeight="Bold" VerticalAlignment="Center"/>
-            <Button Content="Upload New Track" Command="{Binding AddTrackCommand}"
+            <Button Content="Add Files" Command="{Binding AddFileCommand}"
                     Background="{StaticResource AccentBrush}" Foreground="White"
                     Margin="30,0,0,0" Padding="20,10" FontWeight="Bold"/>
+            <Button Content="Add Folder" Command="{Binding AddFolderCommand}"
+                    Background="{StaticResource AccentBrush}" Foreground="White"
+                    Margin="10,0,0,0" Padding="20,10" FontWeight="Bold"/>
         </StackPanel>
 
         <ListView Grid.Row="1" ItemsSource="{Binding MyTracks}"
@@ -25,7 +28,14 @@
                 <GridView>
                     <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="200"/>
                     <GridViewColumn Header="Album" DisplayMemberBinding="{Binding AlbumId}" Width="150"/>
-                    <GridViewColumn Header="File Path" DisplayMemberBinding="{Binding FilePath}" Width="300"/>
+                    <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration, StringFormat=\{0:mm\\:ss\}}" Width="100"/>
+                    <GridViewColumn Header="Actions">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Play" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

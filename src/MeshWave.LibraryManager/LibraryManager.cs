@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TagLib;
 using MeshWave.Core.Interfaces;
 using MeshWave.Core.Models;
 
@@ -39,16 +40,16 @@ public class LibraryManager : ILibraryManager
         var metadataPath = Path.Combine(_storagePath, "metadata.json");
         var data = new { Tracks = _tracks, Albums = _albums, Comments = _comments };
         var json = JsonSerializer.Serialize(data);
-        await File.WriteAllTextAsync(metadataPath, json);
+        await System.IO.File.WriteAllTextAsync(metadataPath, json);
     }
 
     private async Task LoadMetadataAsync()
     {
         if (string.IsNullOrEmpty(_storagePath)) return;
         var metadataPath = Path.Combine(_storagePath, "metadata.json");
-        if (File.Exists(metadataPath))
+        if (System.IO.File.Exists(metadataPath))
         {
-            var json = await File.ReadAllTextAsync(metadataPath);
+            var json = await System.IO.File.ReadAllTextAsync(metadataPath);
             var data = JsonSerializer.Deserialize<MetadataContainer>(json);
             if (data != null)
             {
