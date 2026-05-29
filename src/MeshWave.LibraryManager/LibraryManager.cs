@@ -25,6 +25,10 @@ public class LibraryManager : ILibraryManager
             {
                 Directory.CreateDirectory(_storagePath);
             }
+            // Ensure community folder exists
+            var communityPath = Path.Combine(_storagePath, "Community");
+            if (!Directory.Exists(communityPath)) Directory.CreateDirectory(communityPath);
+
             await LoadMetadataAsync();
         }
     }

@@ -12,7 +12,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         // Poor man's DI for now
-        var config = new AppConfig();
+        var config = AppConfig.Load();
         var libraryManager = new LibraryManager.LibraryManager();
 
         DataContext = new MainViewModel(libraryManager, config);

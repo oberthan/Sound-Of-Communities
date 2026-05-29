@@ -2,6 +2,7 @@ using System;
 using System.Windows.Input;
 using MeshWave.Core.Configuration;
 using MeshWave.Core.Interfaces;
+using System.IO;
 using MeshWave.Wpf.Mvvm;
 
 namespace MeshWave.Wpf.ViewModels;
@@ -59,8 +60,13 @@ public class SetupViewModel : ViewModelBase
         if (_libraryManager != null)
         {
             await _libraryManager.InitializeAsync(_config.StorageRootPath);
+            // Create user specific folder
+            var userFolder = _config.GetUserStoragePath();
+            if (!Directory.Exists(userFolder)) Directory.CreateDirectory(userFolder);
+
             await _libraryManager.ScanForMusicAsync();
         }
+        _config.Save();
         // Notify application to navigate or proceed
     }
 }
