@@ -4,39 +4,77 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="20">
+             d:DesignHeight="600" d:DesignWidth="1000">
+    <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Explore Community Music" FontSize="32" FontWeight="Bold" Margin="0,0,0,20"/>
+        <TextBlock Text="Good morning" Style="{StaticResource Header1}"/>
 
-        <Grid Grid.Row="1" Margin="0,0,0,20">
+        <Grid Grid.Row="1" Margin="0,0,0,30">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Padding="10,8" Background="#2A2A2A" Foreground="White" BorderThickness="0"
-                     Tag="Search tracks..."/>
-            <CheckBox Grid.Column="1" Content="Show My Music Only" IsChecked="{Binding ShowLocalOnly}"
-                      Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0"/>
+
+            <Border Background="{StaticResource SurfaceBrush}" CornerRadius="20" Padding="15,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="🔍" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{StaticResource TextDimBrush}"/>
+                    <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Background="Transparent" BorderThickness="0" Foreground="White"
+                             VerticalAlignment="Center" CaretBrush="White"/>
+                </Grid>
+            </Border>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <RadioButton Content="All Music" IsChecked="True" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,10,0" Padding="15,5"/>
+                <RadioButton Content="My Uploads" IsChecked="{Binding ShowLocalOnly}" Style="{StaticResource {x:Type ToggleButton}}" Padding="15,5"/>
+            </StackPanel>
         </Grid>
 
-        <ListView Grid.Row="2" ItemsSource="{Binding Tracks}"
-                  Background="Transparent" BorderThickness="0" Foreground="White">
+        <ListView Grid.Row="2" ItemsSource="{Binding Tracks}" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.ContextMenu>
+                <ContextMenu Background="{StaticResource SurfaceBrush}" Foreground="White">
+                    <MenuItem Header="Play Now" Command="{Binding PlayCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
+                    <Separator Background="{StaticResource SurfaceLightBrush}"/>
+                    <MenuItem Header="Add to Queue"/>
+                    <MenuItem Header="Favorite"/>
+                    <MenuItem Header="Share Mesh ID"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="200"/>
-                    <GridViewColumn Header="Artist" DisplayMemberBinding="{Binding ArtistId}" Width="150"/>
-                    <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration}" Width="100"/>
-                    <GridViewColumn Header="Actions">
+                    <GridViewColumn Header="#" Width="40">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Play" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}"/>
+                                <TextBlock Text="▶" Foreground="{StaticResource TextDimBrush}" Cursor="Hand" MouseLeftButtonDown="PlayItem_Click"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Title" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="40" Height="40" Background="{StaticResource SurfaceLightBrush}" CornerRadius="4" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Artist" DisplayMemberBinding="{Binding ArtistName}" Width="200"/>
+                    <GridViewColumn Header="Album" DisplayMemberBinding="{Binding AlbumTitle}" Width="200"/>
+                    <GridViewColumn Header="Duration" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Duration, StringFormat=\{0:mm\\:ss\}}" Foreground="{StaticResource TextDimBrush}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

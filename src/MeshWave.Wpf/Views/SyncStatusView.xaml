@@ -18,23 +18,24 @@
                     <Ellipse Width="12" Height="12" Fill="{StaticResource AccentBrush}" VerticalAlignment="Center" Margin="0,0,15,0"/>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Connected to Mesh Network" FontWeight="Bold" FontSize="16"/>
-                        <TextBlock Text="8 active peers discovered" Foreground="{StaticResource SecondaryTextBrush}"/>
+                        <TextBlock Text="{Binding PeerCount, StringFormat='\{0\} active peers discovered'}" Foreground="{StaticResource SecondaryTextBrush}"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <TextBlock Text="Sync Activity" FontSize="18" FontWeight="Bold" Margin="0,10,0,15"/>
+            <TextBlock Text="Active Peers" FontSize="18" FontWeight="Bold" Margin="0,10,0,15"/>
+            <ItemsControl ItemsSource="{Binding Peers}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#1A1A1A" Padding="15" Margin="0,0,0,10" CornerRadius="4">
+                            <TextBlock Text="{Binding}" Foreground="{StaticResource TextDimBrush}"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="Sync Activity" FontSize="18" FontWeight="Bold" Margin="20,10,0,15"/>
             <ItemsControl>
-                <Border Background="#1A1A1A" Padding="15" Margin="0,0,0,10" CornerRadius="4">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Downloading 'Nebula' by StarGazer..."/>
-                        <TextBlock Grid.Column="1" Text="45%" Foreground="{StaticResource AccentBrush}"/>
-                    </Grid>
-                </Border>
                 <Border Background="#1A1A1A" Padding="15" Margin="0,0,0,10" CornerRadius="4">
                     <Grid>
                         <Grid.ColumnDefinitions>

@@ -86,10 +86,13 @@ public class LibraryManager : ILibraryManager
                     {
                         Id = Guid.NewGuid(),
                         Title = string.IsNullOrEmpty(tfile.Tag.Title) ? Path.GetFileNameWithoutExtension(file) : tfile.Tag.Title,
+                        ArtistName = tfile.Tag.FirstPerformer ?? "Unknown Artist",
+                        AlbumTitle = tfile.Tag.Album ?? string.Empty,
+                        Genre = tfile.Tag.FirstGenre ?? string.Empty,
+                        Year = (int)tfile.Tag.Year,
                         FilePath = file,
                         Duration = tfile.Properties.Duration,
-                        Description = tfile.Tag.Comment ?? string.Empty,
-                        // For a real app, we would map the artist name to an ID or create a new user profile
+                        Description = tfile.Tag.Comment ?? string.Empty
                     };
                     await AddTrackAsync(track);
                 }

@@ -7,9 +7,21 @@ namespace MeshWave.Synchronizer;
 
 public class Synchronizer : ISynchronizer
 {
+    private readonly P2PService _p2pService = new();
+
+    public IEnumerable<string> ConnectedPeers => _p2pService.DiscoveredPeers;
+    public int ActiveDownloads => 0;
+    public int ActiveUploads => 0;
+    public event Action? NetworkStatusChanged;
+
+    public Synchronizer()
+    {
+        _p2pService.PeersChanged += () => NetworkStatusChanged?.Invoke();
+    }
+
     public Task StartAsync()
     {
-        // Stub for starting P2P discovery and network services
+        try { _p2pService.StartDiscovery(); } catch { /* Port busy etc */ }
         return Task.CompletedTask;
     }
 

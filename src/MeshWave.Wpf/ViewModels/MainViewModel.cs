@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Input;
 using MeshWave.Core.Configuration;
 using MeshWave.Core.Interfaces;
@@ -9,36 +8,44 @@ namespace MeshWave.Wpf.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    private object _currentView;
-    private readonly AppConfig _config;
+    private readonly INavigationService _navigationService;
     private readonly ILibraryManager _libraryManager;
-    private readonly IMusicPlayerService _playerService;
+    private readonly AppConfig _config;
 
-    public MainViewModel(ILibraryManager libraryManager, AppConfig config, IMusicPlayerService playerService)
+    public MainViewModel(
+        INavigationService navigationService,
+        ILibraryManager libraryManager,
+        AppConfig config,
+        IMusicPlayerService playerService,
+        IWaveformService waveformService)
     {
+        _navigationService = navigationService;
         _libraryManager = libraryManager;
         _config = config;
-        _playerService = playerService;
+        Player = new PlayerViewModel(_libraryManager, playerService, waveformService);
 
-        // Default view is now Library
-        _currentView = new LibraryViewModel(_libraryManager, _config, _playerService);
+        _navigationService.CurrentViewModelChanged += () => OnPropertyChanged(nameof(CurrentView));
 
-        NavigateLibraryCommand = new RelayCommand(_ => CurrentView = new LibraryViewModel(_libraryManager, _config, _playerService));
-        NavigateManageCommand = new RelayCommand(_ => CurrentView = new ManageMusicViewModel(_libraryManager, _config, _playerService));
-        NavigatePlayerCommand = new RelayCommand(_ => CurrentView = new PlayerViewModel(_libraryManager, _playerService));
-        NavigateSyncCommand = new RelayCommand(_ => CurrentView = new SyncStatusViewModel());
-        NavigateSetupCommand = new RelayCommand(_ => CurrentView = new SetupViewModel(_config, _libraryManager));
+        NavigateLibraryCommand = new RelayCommand(_ => _navigationService.NavigateTo<LibraryViewModel>());
+        NavigateManageCommand = new RelayCommand(_ => _navigationService.NavigateTo<ManageMusicViewModel>());
+        NavigateSyncCommand = new RelayCommand(_ => _navigationService.NavigateTo<SyncStatusViewModel>());
+        NavigateSetupCommand = new RelayCommand(_ => _navigationService.NavigateTo<SetupViewModel>());
+
+        // Initial navigation
+        _navigationService.NavigateTo<LibraryViewModel>();
+
+        if (!string.IsNullOrEmpty(_config.StorageRootPath))
+        {
+            _ = _libraryManager.InitializeAsync(_config.StorageRootPath);
+        }
     }
 
-    public object CurrentView
-    {
-        get => _currentView;
-        set => SetProperty(ref _currentView, value);
-    }
+    public object? CurrentView => _navigationService.CurrentViewModel;
+
+    public PlayerViewModel Player { get; }
 
     public ICommand NavigateLibraryCommand { get; }
     public ICommand NavigateManageCommand { get; }
-    public ICommand NavigatePlayerCommand { get; }
     public ICommand NavigateSyncCommand { get; }
     public ICommand NavigateSetupCommand { get; }
 }

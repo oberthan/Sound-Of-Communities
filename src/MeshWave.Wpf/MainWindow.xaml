@@ -6,50 +6,51 @@
         xmlns:vm="clr-namespace:MeshWave.Wpf.ViewModels"
         xmlns:views="clr-namespace:MeshWave.Wpf.Views"
         mc:Ignorable="d"
-        Title="MeshWave" Height="600" Width="900">
+        Title="MeshWave" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}">
+
     <Window.Resources>
-        <DataTemplate DataType="{x:Type vm:SetupViewModel}">
-            <views:SetupView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:LibraryViewModel}">
-            <views:LibraryView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:ManageMusicViewModel}">
-            <views:ManageMusicView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:PlayerViewModel}">
-            <views:PlayerView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:SyncStatusViewModel}">
-            <views:SyncStatusView/>
-        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LibraryViewModel}"><views:LibraryView/></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ManageMusicViewModel}"><views:ManageMusicView/></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PlayerViewModel}"><views:PlayerBarView/></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SyncStatusViewModel}"><views:SyncStatusView/></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SetupViewModel}"><views:SetupView/></DataTemplate>
     </Window.Resources>
 
-    <Grid Background="{StaticResource BackgroundMainBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="90"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background="{StaticResource SidebarBrush}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <!-- Sidebar -->
+        <Grid Grid.Row="0" Grid.Column="0" Background="Black">
+            <StackPanel Margin="10,20">
+                <TextBlock Text="MeshWave" FontSize="24" FontWeight="Bold" Margin="10,0,0,30" Foreground="{StaticResource PrimaryBrush}"/>
 
-            <TextBlock Text="MeshWave" FontSize="28" FontWeight="Bold" Margin="20,30" Foreground="{StaticResource AccentBrush}"/>
+                <Button Content="🏠 Home" Command="{Binding NavigateLibraryCommand}" Style="{StaticResource SidebarButton}"/>
+                <Button Content="🔍 Explore" Command="{Binding NavigateLibraryCommand}" Style="{StaticResource SidebarButton}"/>
+                <Button Content="📚 My Library" Command="{Binding NavigateManageCommand}" Style="{StaticResource SidebarButton}"/>
 
-            <StackPanel Grid.Row="1">
-                <Button Content="Library" Command="{Binding NavigateLibraryCommand}" Style="{StaticResource MenuButtonStyle}"/>
-                <Button Content="My Music" Command="{Binding NavigateManageCommand}" Style="{StaticResource MenuButtonStyle}"/>
-                <Button Content="Player" Command="{Binding NavigatePlayerCommand}" Style="{StaticResource MenuButtonStyle}"/>
-                <Button Content="Sync Status" Command="{Binding NavigateSyncCommand}" Style="{StaticResource MenuButtonStyle}"/>
+                <TextBlock Text="YOUR MESH" FontSize="12" Foreground="{StaticResource TextDimBrush}" Margin="15,30,0,10"/>
+                <Button Content="🌐 Mesh Status" Command="{Binding NavigateSyncCommand}" Style="{StaticResource SidebarButton}"/>
+                <Button Content="⚙️ Settings" Command="{Binding NavigateSetupCommand}" Style="{StaticResource SidebarButton}"/>
             </StackPanel>
-
-            <Button Grid.Row="2" Content="Settings" Command="{Binding NavigateSetupCommand}" Style="{StaticResource MenuButtonStyle}" Margin="0,0,0,20"/>
         </Grid>
 
-        <ContentControl Grid.Column="1" Content="{Binding CurrentView}"/>
+        <!-- Main Content Area -->
+        <Border Grid.Row="0" Grid.Column="1" Background="{StaticResource BackgroundBrush}">
+            <ContentControl Content="{Binding CurrentView}"/>
+        </Border>
+
+        <!-- Bottom Player Bar -->
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource SurfaceLightBrush}" BorderThickness="0,1,0,0">
+            <ContentControl Content="{Binding Player}"/>
+        </Border>
     </Grid>
 </Window>

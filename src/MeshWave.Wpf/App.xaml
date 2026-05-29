@@ -1,14 +1,14 @@
 ﻿<Application x:Class="MeshWave.Wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MeshWave.Wpf"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:MeshWave.Wpf">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <conv:ProgressToXConverter xmlns:conv="clr-namespace:MeshWave.Wpf.Converters" x:Key="ProgressToXConverter"/>
+            <conv:HeightScaleConverter xmlns:conv="clr-namespace:MeshWave.Wpf.Converters" x:Key="HeightScaleConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

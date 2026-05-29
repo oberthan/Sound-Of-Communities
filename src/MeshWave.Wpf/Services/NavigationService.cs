@@ -1,25 +1,26 @@
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MeshWave.Wpf.Services;
 
 public interface INavigationService
 {
+    object? CurrentViewModel { get; }
     void NavigateTo<TViewModel>() where TViewModel : class;
-    object CurrentViewModel { get; }
-    event Action CurrentViewModelChanged;
+    event Action? CurrentViewModelChanged;
 }
 
 public class NavigationService : INavigationService
 {
-    private readonly Func<Type, object> _viewModelFactory;
-    private object _currentViewModel;
+    private readonly IServiceProvider _serviceProvider;
+    private object? _currentViewModel;
 
-    public NavigationService(Func<Type, object> viewModelFactory)
+    public NavigationService(IServiceProvider serviceProvider)
     {
-        _viewModelFactory = viewModelFactory;
+        _serviceProvider = serviceProvider;
     }
 
-    public object CurrentViewModel
+    public object? CurrentViewModel
     {
         get => _currentViewModel;
         private set
@@ -29,10 +30,10 @@ public class NavigationService : INavigationService
         }
     }
 
-    public event Action CurrentViewModelChanged;
+    public event Action? CurrentViewModelChanged;
 
     public void NavigateTo<TViewModel>() where TViewModel : class
     {
-        CurrentViewModel = _viewModelFactory(typeof(TViewModel));
+        CurrentViewModel = _serviceProvider.GetRequiredService<TViewModel>();
     }
 }

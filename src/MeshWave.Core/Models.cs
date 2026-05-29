@@ -25,12 +25,16 @@ public class Track
 {
     public Guid Id { get; set; }
     public Guid ArtistId { get; set; }
+    public string ArtistName { get; set; } = "Unknown Artist";
     public Guid? AlbumId { get; set; }
+    public string AlbumTitle { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string? CoverImagePath { get; set; }
     public string FilePath { get; set; } = string.Empty;
     public TimeSpan Duration { get; set; }
+    public string Genre { get; set; } = string.Empty;
+    public int? Year { get; set; }
 }
 
 public class Comment

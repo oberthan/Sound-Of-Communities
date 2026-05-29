@@ -27,4 +27,8 @@ public interface ISynchronizer
     Task SynchronizeAsync();
     Task BroadcastUpdateAsync<T>(T item) where T : class;
     bool ValidateOwnership(Guid entityId, Guid userId, Guid actualOwnerId);
+    IEnumerable<string> ConnectedPeers { get; }
+    int ActiveDownloads { get; }
+    int ActiveUploads { get; }
+    event Action? NetworkStatusChanged;
 }
