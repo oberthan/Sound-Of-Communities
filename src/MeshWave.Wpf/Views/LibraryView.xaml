@@ -5,15 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Margin="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Community Library" FontSize="20" FontWeight="Bold" Margin="10"/>
+        <TextBlock Text="Explore Community Music" FontSize="32" FontWeight="Bold" Margin="0,0,0,20"/>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding CommunityTracks}" Margin="10">
+        <TextBox Grid.Row="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="0,0,0,20" Padding="10,8" Background="#2A2A2A" Foreground="White" BorderThickness="0"
+                 Tag="Search tracks..."/>
+
+        <ListView Grid.Row="2" ItemsSource="{Binding CommunityTracks}"
+                  Background="Transparent" BorderThickness="0" Foreground="White">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="200"/>

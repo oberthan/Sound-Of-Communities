@@ -8,20 +8,35 @@ using MeshWave.Wpf.Mvvm;
 
 namespace MeshWave.Wpf.ViewModels;
 
+using MeshWave.Wpf.Services;
+
 public class PlayerViewModel : ViewModelBase
 {
     private readonly ILibraryManager _libraryManager;
+    private readonly IMusicPlayerService _playerService;
     private Track? _currentTrack;
     private bool _isPlaying;
     private TimeSpan _currentTime;
     private double _progress;
 
-    public PlayerViewModel(ILibraryManager libraryManager)
+    public PlayerViewModel(ILibraryManager libraryManager, IMusicPlayerService playerService)
     {
         _libraryManager = libraryManager;
+        _playerService = playerService;
         Comments = new ObservableCollection<Comment>();
         PlayPauseCommand = new RelayCommand(_ => PlayPause());
         AddCommentCommand = new RelayCommand(_ => AddComment());
+
+        _playerService.PlayStateChanged += () => {
+            IsPlaying = _playerService.CurrentTrack != null && _playerService.TotalDuration > TimeSpan.Zero; // Simplified
+            CurrentTrack = _playerService.CurrentTrack;
+            OnPropertyChanged(nameof(IsPlaying));
+        };
+
+        _playerService.PositionChanged += () => {
+            CurrentTime = _playerService.CurrentPosition;
+            UpdateProgress();
+        };
     }
 
     public Track? CurrentTrack
@@ -67,7 +82,10 @@ public class PlayerViewModel : ViewModelBase
 
     private void PlayPause()
     {
-        IsPlaying = !IsPlaying;
+        if (IsPlaying)
+            _playerService.Pause();
+        else
+            _playerService.Resume();
     }
 
     private async Task LoadCommentsAsync()

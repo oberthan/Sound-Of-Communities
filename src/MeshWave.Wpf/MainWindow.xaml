@@ -20,21 +20,35 @@
         <DataTemplate DataType="{x:Type vm:PlayerViewModel}">
             <views:PlayerView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SyncStatusViewModel}">
+            <views:SyncStatusView/>
+        </DataTemplate>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource BackgroundMainBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="240"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Background="#e0e0e0">
-            <TextBlock Text="MeshWave" FontSize="24" FontWeight="Bold" Margin="10,20"/>
-            <Button Content="Library" Command="{Binding NavigateLibraryCommand}"/>
-            <Button Content="My Music" Command="{Binding NavigateManageCommand}"/>
-            <Button Content="Player" Command="{Binding NavigatePlayerCommand}"/>
-            <Button Content="Setup" Command="{Binding NavigateSetupCommand}" VerticalAlignment="Bottom" Margin="5,50,5,5"/>
-        </StackPanel>
+        <Grid Background="{StaticResource SidebarBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="MeshWave" FontSize="28" FontWeight="Bold" Margin="20,30" Foreground="{StaticResource AccentBrush}"/>
+
+            <StackPanel Grid.Row="1">
+                <Button Content="Library" Command="{Binding NavigateLibraryCommand}" Style="{StaticResource MenuButtonStyle}"/>
+                <Button Content="My Music" Command="{Binding NavigateManageCommand}" Style="{StaticResource MenuButtonStyle}"/>
+                <Button Content="Player" Command="{Binding NavigatePlayerCommand}" Style="{StaticResource MenuButtonStyle}"/>
+                <Button Content="Sync Status" Command="{Binding NavigateSyncCommand}" Style="{StaticResource MenuButtonStyle}"/>
+            </StackPanel>
+
+            <Button Grid.Row="2" Content="Settings" Command="{Binding NavigateSetupCommand}" Style="{StaticResource MenuButtonStyle}" Margin="0,0,0,20"/>
+        </Grid>
 
         <ContentControl Grid.Column="1" Content="{Binding CurrentView}"/>
     </Grid>

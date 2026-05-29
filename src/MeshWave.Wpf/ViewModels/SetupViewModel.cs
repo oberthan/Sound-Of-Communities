@@ -42,10 +42,11 @@ public class SetupViewModel : ViewModelBase
 
     private void Browse()
     {
-        // Use a mock folder selection for now as we don't have interactive UI in this environment
-        // In a real WPF app, we'd use WinForms FolderBrowserDialog or a WPF equivalent.
-        string defaultPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic), "MeshWave");
-        StoragePath = defaultPath;
+        var dialog = new Microsoft.Win32.OpenFolderDialog();
+        if (dialog.ShowDialog() == true)
+        {
+            StoragePath = dialog.FolderName;
+        }
     }
 
     private async void Save()

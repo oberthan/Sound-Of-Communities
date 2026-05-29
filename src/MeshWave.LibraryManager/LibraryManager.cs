@@ -70,22 +70,40 @@ public class LibraryManager : ILibraryManager
     {
         if (string.IsNullOrEmpty(_storagePath) || !Directory.Exists(_storagePath)) return;
 
+        var extensions = new[] { ".mp3", ".wav", ".flac", ".m4a" };
         var files = Directory.EnumerateFiles(_storagePath, "*.*", SearchOption.AllDirectories)
-            .Where(f => f.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) ||
-                        f.EndsWith(".wav", StringComparison.OrdinalIgnoreCase));
+            .Where(f => extensions.Contains(Path.GetExtension(f).ToLower()));
 
         foreach (var file in files)
         {
             if (!_tracks.Any(t => t.FilePath == file))
             {
-                var track = new Track
+                try
                 {
-                    Id = Guid.NewGuid(),
-                    Title = Path.GetFileNameWithoutExtension(file),
-                    FilePath = file,
-                    ArtistId = Guid.Empty // Unknown artist from scan for now
-                };
-                await AddTrackAsync(track);
+                    using var tfile = TagLib.File.Create(file);
+                    var track = new Track
+                    {
+                        Id = Guid.NewGuid(),
+                        Title = string.IsNullOrEmpty(tfile.Tag.Title) ? Path.GetFileNameWithoutExtension(file) : tfile.Tag.Title,
+                        FilePath = file,
+                        Duration = tfile.Properties.Duration,
+                        Description = tfile.Tag.Comment ?? string.Empty,
+                        // For a real app, we would map the artist name to an ID or create a new user profile
+                    };
+                    await AddTrackAsync(track);
+                }
+                catch
+                {
+                    // Fallback for files with corrupt metadata
+                    var track = new Track
+                    {
+                        Id = Guid.NewGuid(),
+                        Title = Path.GetFileNameWithoutExtension(file),
+                        FilePath = file,
+                        ArtistId = Guid.Empty
+                    };
+                    await AddTrackAsync(track);
+                }
             }
         }
     }

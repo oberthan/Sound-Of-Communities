@@ -4,8 +4,11 @@
              xmlns:local="clr-namespace:MeshWave.Wpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary xmlns:conv="clr-namespace:MeshWave.Wpf.Converters">
-            <conv:ProgressToXConverter x:Key="ProgressToXConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <conv:ProgressToXConverter xmlns:conv="clr-namespace:MeshWave.Wpf.Converters" x:Key="ProgressToXConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
