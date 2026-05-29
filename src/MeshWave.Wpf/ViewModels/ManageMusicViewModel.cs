@@ -81,44 +81,18 @@ public class ManageMusicViewModel : ViewModelBase
 
     private async Task ProcessNewTrack(string filePath)
     {
-        // In a real app, we would copy the file to the user folder or just reference it.
-        // The prompt says "user places his own albums and tracks" in a special folder.
-        // We will copy the file to the user folder.
-
         var userFolder = _config.GetUserStoragePath();
         if (!System.IO.Directory.Exists(userFolder)) System.IO.Directory.CreateDirectory(userFolder);
 
         var destPath = System.IO.Path.Combine(userFolder, System.IO.Path.GetFileName(filePath));
         if (filePath != destPath)
         {
-            System.IO.File.Copy(filePath, destPath, true);
+            try { System.IO.File.Copy(filePath, destPath, true); } catch { /* Permission or locking issue */ }
         }
 
-        try
+        var track = await _libraryManager.TryAddTrackFromFileAsync(destPath, _config.UserId);
+        if (!MyTracks.Any(t => t.FilePath == track.FilePath))
         {
-            using var tfile = TagLib.File.Create(destPath);
-            var track = new Track
-            {
-                Id = Guid.NewGuid(),
-                ArtistId = _config.UserId,
-                Title = string.IsNullOrEmpty(tfile.Tag.Title) ? System.IO.Path.GetFileNameWithoutExtension(destPath) : tfile.Tag.Title,
-                FilePath = destPath,
-                Duration = tfile.Properties.Duration,
-                Description = tfile.Tag.Comment ?? string.Empty
-            };
-            await _libraryManager.AddTrackAsync(track);
-            MyTracks.Add(track);
-        }
-        catch
-        {
-            var track = new Track
-            {
-                Id = Guid.NewGuid(),
-                ArtistId = _config.UserId,
-                Title = System.IO.Path.GetFileNameWithoutExtension(destPath),
-                FilePath = destPath
-            };
-            await _libraryManager.AddTrackAsync(track);
             MyTracks.Add(track);
         }
     }

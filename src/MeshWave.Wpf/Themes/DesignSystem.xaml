@@ -7,7 +7,8 @@
     <Color x:Key="SurfaceColor">#181818</Color>
     <Color x:Key="SurfaceLightColor">#282828</Color>
     <Color x:Key="TextColor">#FFFFFF</Color>
-    <Color x:Key="TextDimColor">#B3B3B3</Color>
+    <Color x:Key="TextDimColor">#A7A7A7</Color>
+    <Color x:Key="SidebarBgColor">#000000</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
@@ -17,6 +18,7 @@
     <SolidColorBrush x:Key="TextDimBrush" Color="{StaticResource TextDimColor}"/>
     <SolidColorBrush x:Key="SecondaryTextBrush" Color="{StaticResource TextDimColor}"/>
     <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="SidebarBgBrush" Color="{StaticResource SidebarBgColor}"/>
 
     <!-- Shared Styles -->
     <Style TargetType="TextBlock">

@@ -29,13 +29,14 @@
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
-        <Grid Grid.Row="0" Grid.Column="0" Background="Black">
+        <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource SidebarBgBrush}">
             <StackPanel Margin="10,20">
                 <TextBlock Text="MeshWave" FontSize="24" FontWeight="Bold" Margin="10,0,0,30" Foreground="{StaticResource PrimaryBrush}"/>
 
                 <Button Content="🏠 Home" Command="{Binding NavigateLibraryCommand}" Style="{StaticResource SidebarButton}"/>
                 <Button Content="🔍 Explore" Command="{Binding NavigateLibraryCommand}" Style="{StaticResource SidebarButton}"/>
                 <Button Content="📚 My Library" Command="{Binding NavigateManageCommand}" Style="{StaticResource SidebarButton}"/>
+                <Button Content="🎵 Now Playing" Command="{Binding NavigatePlayerViewCommand}" Style="{StaticResource SidebarButton}"/>
 
                 <TextBlock Text="YOUR MESH" FontSize="12" Foreground="{StaticResource TextDimBrush}" Margin="15,30,0,10"/>
                 <Button Content="🌐 Mesh Status" Command="{Binding NavigateSyncCommand}" Style="{StaticResource SidebarButton}"/>

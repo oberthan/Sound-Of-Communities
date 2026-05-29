@@ -30,6 +30,7 @@ public class MainViewModel : ViewModelBase
         NavigateManageCommand = new RelayCommand(_ => _navigationService.NavigateTo<ManageMusicViewModel>());
         NavigateSyncCommand = new RelayCommand(_ => _navigationService.NavigateTo<SyncStatusViewModel>());
         NavigateSetupCommand = new RelayCommand(_ => _navigationService.NavigateTo<SetupViewModel>());
+        NavigatePlayerViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<PlayerViewModel>());
 
         // Initial navigation
         _navigationService.NavigateTo<LibraryViewModel>();
@@ -48,4 +49,5 @@ public class MainViewModel : ViewModelBase
     public ICommand NavigateManageCommand { get; }
     public ICommand NavigateSyncCommand { get; }
     public ICommand NavigateSetupCommand { get; }
+    public ICommand NavigatePlayerViewCommand { get; }
 }

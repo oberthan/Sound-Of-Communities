@@ -62,6 +62,7 @@ public class LibraryViewModel : ViewModelBase
 
     public ICommand PlayCommand { get; }
     public ICommand ToggleLocalCommand { get; }
+    public ICommand RemoveTrackCommand { get; }
 
     private async Task LoadTracksAsync()
     {

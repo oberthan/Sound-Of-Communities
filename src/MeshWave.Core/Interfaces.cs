@@ -11,11 +11,13 @@ public interface ILibraryManager
     Task<IEnumerable<Track>> GetCommunityTracksAsync(Guid currentUserId);
     Task<IEnumerable<Album>> GetAllAlbumsAsync();
     Task<IEnumerable<Track>> GetTracksByArtistAsync(Guid artistId);
+    Task<Track> TryAddTrackFromFileAsync(string filePath, Guid artistId);
     Task AddTrackAsync(Track track);
     Task AddAlbumAsync(Album album);
     Task<IEnumerable<Comment>> GetCommentsForTargetAsync(Guid targetId);
     Task AddCommentAsync(Comment comment);
     Task DeleteCommentAsync(Guid commentId, Guid userId);
+    Task RemoveTrackAsync(Guid trackId);
     Task InitializeAsync(string storagePath);
     Task ScanForMusicAsync();
 }

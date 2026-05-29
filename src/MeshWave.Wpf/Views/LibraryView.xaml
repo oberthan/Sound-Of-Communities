@@ -45,7 +45,7 @@
                 <ContextMenu Background="{StaticResource SurfaceBrush}" Foreground="White">
                     <MenuItem Header="Play Now" Command="{Binding PlayCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
                     <Separator Background="{StaticResource SurfaceLightBrush}"/>
-                    <MenuItem Header="Add to Queue"/>
+                    <MenuItem Header="Remove from Library" Command="{Binding RemoveTrackCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
                     <MenuItem Header="Favorite"/>
                     <MenuItem Header="Share Mesh ID"/>
                 </ContextMenu>
@@ -69,8 +69,20 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Artist" DisplayMemberBinding="{Binding ArtistName}" Width="200"/>
-                    <GridViewColumn Header="Album" DisplayMemberBinding="{Binding AlbumTitle}" Width="200"/>
+                    <GridViewColumn Header="Artist" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ArtistName}" Foreground="{StaticResource TextDimBrush}" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Album" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding AlbumTitle}" Foreground="{StaticResource TextDimBrush}" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Duration" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

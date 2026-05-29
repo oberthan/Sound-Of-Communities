@@ -77,39 +77,46 @@ public class LibraryManager : ILibraryManager
 
         foreach (var file in files)
         {
-            if (!_tracks.Any(t => t.FilePath == file))
-            {
-                try
-                {
-                    using var tfile = TagLib.File.Create(file);
-                    var track = new Track
-                    {
-                        Id = Guid.NewGuid(),
-                        Title = string.IsNullOrEmpty(tfile.Tag.Title) ? Path.GetFileNameWithoutExtension(file) : tfile.Tag.Title,
-                        ArtistName = tfile.Tag.FirstPerformer ?? "Unknown Artist",
-                        AlbumTitle = tfile.Tag.Album ?? string.Empty,
-                        Genre = tfile.Tag.FirstGenre ?? string.Empty,
-                        Year = (int)tfile.Tag.Year,
-                        FilePath = file,
-                        Duration = tfile.Properties.Duration,
-                        Description = tfile.Tag.Comment ?? string.Empty
-                    };
-                    await AddTrackAsync(track);
-                }
-                catch
-                {
-                    // Fallback for files with corrupt metadata
-                    var track = new Track
-                    {
-                        Id = Guid.NewGuid(),
-                        Title = Path.GetFileNameWithoutExtension(file),
-                        FilePath = file,
-                        ArtistId = Guid.Empty
-                    };
-                    await AddTrackAsync(track);
-                }
-            }
+            await TryAddTrackFromFileAsync(file, Guid.Empty);
         }
+    }
+
+    public async Task<Track> TryAddTrackFromFileAsync(string filePath, Guid artistId)
+    {
+        var existing = _tracks.FirstOrDefault(t => t.FilePath == filePath);
+        if (existing != null) return existing;
+
+        Track track;
+        try
+        {
+            using var tfile = TagLib.File.Create(filePath);
+            track = new Track
+            {
+                Id = Guid.NewGuid(),
+                ArtistId = artistId,
+                Title = string.IsNullOrEmpty(tfile.Tag.Title) ? Path.GetFileNameWithoutExtension(filePath) : tfile.Tag.Title,
+                ArtistName = tfile.Tag.FirstPerformer ?? "Unknown Artist",
+                AlbumTitle = tfile.Tag.Album ?? string.Empty,
+                Genre = tfile.Tag.FirstGenre ?? string.Empty,
+                Year = (int)tfile.Tag.Year,
+                FilePath = filePath,
+                Duration = tfile.Properties.Duration,
+                Description = tfile.Tag.Comment ?? string.Empty
+            };
+        }
+        catch
+        {
+            track = new Track
+            {
+                Id = Guid.NewGuid(),
+                ArtistId = artistId,
+                Title = Path.GetFileNameWithoutExtension(filePath),
+                FilePath = filePath
+            };
+        }
+
+        await AddTrackAsync(track);
+        return track;
     }
 
     public Task<IEnumerable<Track>> GetAllTracksAsync()
@@ -166,6 +173,16 @@ public class LibraryManager : ILibraryManager
         if (comment != null)
         {
             _comments.Remove(comment);
+            await SaveMetadataAsync();
+        }
+    }
+
+    public async Task RemoveTrackAsync(Guid trackId)
+    {
+        var track = _tracks.FirstOrDefault(t => t.Id == trackId);
+        if (track != null)
+        {
+            _tracks.Remove(track);
             await SaveMetadataAsync();
         }
     }
