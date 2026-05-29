@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MeshWave.Core/MeshWave.Core.csproj" />
+    <Project Path="src/MeshWave.LibraryManager/MeshWave.LibraryManager.csproj" />
+    <Project Path="src/MeshWave.Synchronizer/MeshWave.Synchronizer.csproj" />
+    <Project Path="src/MeshWave.Tests/MeshWave.Tests.csproj" />
+    <Project Path="src/MeshWave.Wpf/MeshWave.Wpf.csproj" />
+  </Folder>
+</Solution>
