@@ -1,0 +1,3 @@
+## 2025-05-15 - WPF Accessibility and Search UX
+**Learning:** In WPF applications, icon-only buttons lack inherent accessibility. `AutomationProperties.Name` must be used as the equivalent of ARIA labels to ensure screen reader compatibility. Additionally, search inputs benefit greatly from a 'Clear' button whose visibility is toggled by `DataTriggers` based on the `SearchText` property.
+**Action:** Always include `AutomationProperties.Name` and `ToolTip` on icon-only buttons in XAML. Implement a `ClearSearchCommand` and a corresponding '✕' button with `DataTriggers` for all search functionalities.

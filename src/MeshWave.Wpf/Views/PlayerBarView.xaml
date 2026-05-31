@@ -26,8 +26,10 @@
         <!-- Controls -->
         <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                <Button Content="⏮" Style="{StaticResource SidebarButton}" FontSize="18"/>
+                <Button Content="⏮" Style="{StaticResource SidebarButton}" FontSize="18"
+                        ToolTip="Previous" AutomationProperties.Name="Previous track"/>
                 <Button Content="{Binding PlayPauseIcon}" Command="{Binding PlayPauseCommand}"
+                        ToolTip="Play/Pause" AutomationProperties.Name="Play or pause"
                         Background="White" Foreground="Black" Width="36" Height="36" Margin="15,0">
                     <Button.Style>
                         <Style TargetType="Button">
@@ -43,7 +45,8 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button Content="⏭" Style="{StaticResource SidebarButton}" FontSize="18"/>
+                <Button Content="⏭" Style="{StaticResource SidebarButton}" FontSize="18"
+                        ToolTip="Next" AutomationProperties.Name="Next track"/>
             </StackPanel>
 
             <Grid Width="500">
@@ -80,8 +83,9 @@
 
         <!-- Volume & Extras -->
         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-             <Button Content="💬" Style="{StaticResource SidebarButton}" Margin="0,0,10,0"/>
-            <TextBlock Text="🔊" Margin="0,0,10,0" VerticalAlignment="Center"/>
+             <Button Content="💬" Style="{StaticResource SidebarButton}" Margin="0,0,10,0"
+                     ToolTip="Comments" AutomationProperties.Name="View and add comments"/>
+            <TextBlock Text="🔊" Margin="0,0,10,0" VerticalAlignment="Center" AutomationProperties.Name="Volume"/>
             <Slider Width="80" Maximum="1" Value="{Binding Volume}" VerticalAlignment="Center"/>
         </StackPanel>
     </Grid>
