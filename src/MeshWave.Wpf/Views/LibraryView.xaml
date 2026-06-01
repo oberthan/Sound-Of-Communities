@@ -26,11 +26,33 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="🔍" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{StaticResource TextDimBrush}"/>
-                    <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Grid.Column="1" x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                              Background="Transparent" BorderThickness="0" Foreground="White"
                              VerticalAlignment="Center" CaretBrush="White"/>
+                    <Button Grid.Column="2" Content="✕" Command="{Binding ClearSearchCommand}"
+                            Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextDimBrush}"
+                            VerticalAlignment="Center" Margin="5,0,0,0"
+                            AutomationProperties.Name="Clear search" ToolTip="Clear search">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SearchText}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SearchText}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </Border>
 
