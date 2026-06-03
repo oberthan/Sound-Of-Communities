@@ -73,6 +73,8 @@ public class PlayerViewModel : ViewModelBase
 
     public string PlayPauseIcon => IsPlaying ? "⏸" : "▶";
 
+    public string PlayPauseActionName => IsPlaying ? "Pause" : "Play";
+
     public string CurrentTimeStr => _playerService.CurrentPosition.ToString(@"mm\:ss");
     public string DurationStr => _playerService.TotalDuration.ToString(@"mm\:ss");
 
