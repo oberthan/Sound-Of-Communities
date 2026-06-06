@@ -30,6 +30,8 @@ public class LibraryViewModel : ViewModelBase
         Tracks = new ObservableCollection<Track>();
         PlayCommand = new RelayCommand(p => PlayTrack(p as Track));
         ToggleLocalCommand = new RelayCommand(_ => { ShowLocalOnly = !ShowLocalOnly; });
+        ClearSearchCommand = new RelayCommand(_ => SearchText = string.Empty);
+        RemoveTrackCommand = new RelayCommand(p => RemoveTrack(p as Track));
 
         _ = LoadTracksAsync();
     }
@@ -63,6 +65,7 @@ public class LibraryViewModel : ViewModelBase
     public ICommand PlayCommand { get; }
     public ICommand ToggleLocalCommand { get; }
     public ICommand RemoveTrackCommand { get; }
+    public ICommand ClearSearchCommand { get; }
 
     private async Task LoadTracksAsync()
     {
@@ -88,5 +91,22 @@ public class LibraryViewModel : ViewModelBase
     {
         if (track == null) return;
         _playerService.Play(track);
+    }
+
+    private void RemoveTrack(Track? track)
+    {
+        if (track == null) return;
+
+        var result = System.Windows.MessageBox.Show(
+            $"Are you sure you want to remove '{track.Title}' from your library?",
+            "Remove Track",
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Warning);
+
+        if (result == System.Windows.MessageBoxResult.Yes)
+        {
+            _allTracks.Remove(track);
+            FilterTracks();
+        }
     }
 }
