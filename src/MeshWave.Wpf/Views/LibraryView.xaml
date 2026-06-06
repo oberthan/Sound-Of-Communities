@@ -26,11 +26,33 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="🔍" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{StaticResource TextDimBrush}"/>
-                    <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox x:Name="SearchBox" Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                              Background="Transparent" BorderThickness="0" Foreground="White"
-                             VerticalAlignment="Center" CaretBrush="White"/>
+                             VerticalAlignment="Center" CaretBrush="White" />
+                    <Button Grid.Column="2" Content="✕" Command="{Binding ClearSearchCommand}"
+                            Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextDimBrush}"
+                            VerticalAlignment="Center" Margin="5,0,0,0" Cursor="Hand"
+                            AutomationProperties.Name="Clear search" ToolTip="Clear search">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SearchText}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SearchText}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </Border>
 
@@ -55,7 +77,32 @@
                     <GridViewColumn Header="#" Width="40">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="▶" Foreground="{StaticResource TextDimBrush}" Cursor="Hand" MouseLeftButtonDown="PlayItem_Click"/>
+                                <Button Content="▶"
+                                        Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"
+                                        Background="Transparent" BorderThickness="0"
+                                        Foreground="{StaticResource TextDimBrush}" Cursor="Hand"
+                                        AutomationProperties.Name="Play" ToolTip="Play this track">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
