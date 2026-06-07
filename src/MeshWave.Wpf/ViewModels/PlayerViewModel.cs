@@ -34,6 +34,7 @@ public class PlayerViewModel : ViewModelBase
             CurrentTrack = _playerService.CurrentTrack;
             OnPropertyChanged(nameof(IsPlaying));
             OnPropertyChanged(nameof(PlayPauseIcon));
+            OnPropertyChanged(nameof(PlayPauseActionText));
             OnPropertyChanged(nameof(DurationStr));
         };
 
@@ -72,6 +73,7 @@ public class PlayerViewModel : ViewModelBase
     public bool IsPlaying => _playerService.IsPlaying;
 
     public string PlayPauseIcon => IsPlaying ? "⏸" : "▶";
+    public string PlayPauseActionText => IsPlaying ? "Pause" : "Play";
 
     public string CurrentTimeStr => _playerService.CurrentPosition.ToString(@"mm\:ss");
     public string DurationStr => _playerService.TotalDuration.ToString(@"mm\:ss");
