@@ -43,19 +43,27 @@
         <ListView Grid.Row="2" ItemsSource="{Binding Tracks}" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.ContextMenu>
                 <ContextMenu Background="{StaticResource SurfaceBrush}" Foreground="White">
-                    <MenuItem Header="Play Now" Command="{Binding PlayCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
+                    <MenuItem Header="Play Now"
+                              Command="{Binding PlacementTarget.DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
                     <Separator Background="{StaticResource SurfaceLightBrush}"/>
-                    <MenuItem Header="Remove from Library" Command="{Binding RemoveTrackCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
+                    <MenuItem Header="Remove from Library"
+                              Command="{Binding PlacementTarget.DataContext.RemoveTrackCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
                     <MenuItem Header="Favorite"/>
                     <MenuItem Header="Share Mesh ID"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="#" Width="40">
+                    <GridViewColumn Header="#" Width="45">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="▶" Foreground="{StaticResource TextDimBrush}" Cursor="Hand" MouseLeftButtonDown="PlayItem_Click"/>
+                                <Button Content="▶" Style="{StaticResource SidebarButton}"
+                                        Padding="5,0" Margin="0"
+                                        AutomationProperties.Name="Play" ToolTip="Play"
+                                        Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -87,6 +95,18 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Duration, StringFormat=\{0:mm\\:ss\}}" Foreground="{StaticResource TextDimBrush}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="40">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="✕" Style="{StaticResource SidebarButton}"
+                                        Padding="5,0" Margin="0"
+                                        Foreground="#E81123"
+                                        AutomationProperties.Name="Remove from Library" ToolTip="Remove from Library"
+                                        Command="{Binding DataContext.RemoveTrackCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
