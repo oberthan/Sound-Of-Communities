@@ -29,6 +29,7 @@ public class LibraryViewModel : ViewModelBase
         _playerService = playerService;
         Tracks = new ObservableCollection<Track>();
         PlayCommand = new RelayCommand(p => PlayTrack(p as Track));
+        ClearSearchCommand = new RelayCommand(_ => SearchText = string.Empty);
         ToggleLocalCommand = new RelayCommand(_ => { ShowLocalOnly = !ShowLocalOnly; });
 
         _ = LoadTracksAsync();
@@ -61,6 +62,7 @@ public class LibraryViewModel : ViewModelBase
     }
 
     public ICommand PlayCommand { get; }
+    public ICommand ClearSearchCommand { get; }
     public ICommand ToggleLocalCommand { get; }
     public ICommand RemoveTrackCommand { get; }
 
