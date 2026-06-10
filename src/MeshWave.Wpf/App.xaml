@@ -9,6 +9,7 @@
             </ResourceDictionary.MergedDictionaries>
             <conv:ProgressToXConverter xmlns:conv="clr-namespace:MeshWave.Wpf.Converters" x:Key="ProgressToXConverter"/>
             <conv:HeightScaleConverter xmlns:conv="clr-namespace:MeshWave.Wpf.Converters" x:Key="HeightScaleConverter"/>
+            <conv:StringToBooleanConverter xmlns:conv="clr-namespace:MeshWave.Wpf.Converters" x:Key="StringToBooleanConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

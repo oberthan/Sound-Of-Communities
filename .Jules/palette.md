@@ -1,0 +1,3 @@
+## 2025-05-15 - [WPF Accessibility and Context Menu Binding]
+**Learning:** Icon-only buttons in WPF must use `AutomationProperties.Name` and `ToolTip` for accessibility. Additionally, `ContextMenu` in WPF resides in a separate visual tree, requiring `PlacementTarget.DataContext` with `RelativeSource` to correctly bind to the parent's ViewModel. Re-using `TextBlock` for interactive elements via mouse events fails keyboard accessibility; using a `Button` with a custom `ControlTemplate` is the preferred accessible pattern.
+**Action:** Always use proper `Button` elements for interactions and ensure `RelativeSource` is used for `ContextMenu` bindings.
