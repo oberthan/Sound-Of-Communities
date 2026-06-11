@@ -11,14 +11,4 @@ public partial class LibraryView : UserControl
         InitializeComponent();
     }
 
-    private void PlayItem_Click(object sender, MouseButtonEventArgs e)
-    {
-        if (sender is TextBlock tb && tb.DataContext is Track track)
-        {
-            if (DataContext is ViewModels.LibraryViewModel vm)
-            {
-                vm.PlayCommand.Execute(track);
-            }
-        }
-    }
 }
