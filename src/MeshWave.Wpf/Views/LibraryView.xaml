@@ -26,11 +26,40 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="🔍" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{StaticResource TextDimBrush}"/>
-                    <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox x:Name="SearchInput" Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                              Background="Transparent" BorderThickness="0" Foreground="White"
                              VerticalAlignment="Center" CaretBrush="White"/>
+                    <TextBlock Grid.Column="1" Text="Search tracks..." VerticalAlignment="Center"
+                               Foreground="{StaticResource TextDimBrush}" IsHitTestVisible="False" Margin="2,0,0,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchInput}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <Button Grid.Column="2" Content="✕" Command="{Binding ClearSearchCommand}"
+                            Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextDimBrush}"
+                            VerticalAlignment="Center" Margin="5,0,0,0" Cursor="Hand"
+                            ToolTip="Clear search" AutomationProperties.Name="Clear search">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchInput}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </Border>
 
@@ -55,7 +84,22 @@
                     <GridViewColumn Header="#" Width="40">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="▶" Foreground="{StaticResource TextDimBrush}" Cursor="Hand" MouseLeftButtonDown="PlayItem_Click"/>
+                                <Button Content="▶"
+                                        Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"
+                                        Background="Transparent" BorderThickness="0"
+                                        Foreground="{StaticResource TextDimBrush}" Cursor="Hand"
+                                        ToolTip="Play" AutomationProperties.Name="Play track">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

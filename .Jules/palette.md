@@ -1,0 +1,3 @@
+## 2025-05-15 - [WPF Accessibility and Search UX]
+**Learning:** Icon-only buttons in WPF must have `AutomationProperties.Name` for screen readers and `ToolTip` for visual aid. Search inputs benefit greatly from overlay placeholders (using DataTriggers on Text.Length) and explicit "Clear" buttons to improve usability. Replaced TextBlock mouse events with Button elements in ListViews ensures keyboard focusability (Tab navigation).
+**Action:** Always use Button for interactive list items. Implement context-aware properties like `PlayPauseActionText` for dynamic accessible labels. Use DataTriggers for visibility toggling of search helpers.
