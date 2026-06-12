@@ -12,6 +12,7 @@ namespace MeshWave.Wpf.ViewModels;
 using MeshWave.Wpf.Services;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows;
 
 public class LibraryViewModel : ViewModelBase
 {
@@ -29,6 +30,8 @@ public class LibraryViewModel : ViewModelBase
         _playerService = playerService;
         Tracks = new ObservableCollection<Track>();
         PlayCommand = new RelayCommand(p => PlayTrack(p as Track));
+        RemoveTrackCommand = new RelayCommand(p => RemoveTrack(p as Track));
+        ClearSearchCommand = new RelayCommand(_ => SearchText = string.Empty);
         ToggleLocalCommand = new RelayCommand(_ => { ShowLocalOnly = !ShowLocalOnly; });
 
         _ = LoadTracksAsync();
@@ -61,6 +64,7 @@ public class LibraryViewModel : ViewModelBase
     }
 
     public ICommand PlayCommand { get; }
+    public ICommand ClearSearchCommand { get; }
     public ICommand ToggleLocalCommand { get; }
     public ICommand RemoveTrackCommand { get; }
 
@@ -88,5 +92,20 @@ public class LibraryViewModel : ViewModelBase
     {
         if (track == null) return;
         _playerService.Play(track);
+    }
+
+    private async void RemoveTrack(Track? track)
+    {
+        if (track == null) return;
+
+        var result = MessageBox.Show($"Are you sure you want to remove '{track.Title}' from your library?",
+            "Remove Track", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            await _libraryManager.RemoveTrackAsync(track.Id);
+            _allTracks.Remove(track);
+            FilterTracks();
+        }
     }
 }
