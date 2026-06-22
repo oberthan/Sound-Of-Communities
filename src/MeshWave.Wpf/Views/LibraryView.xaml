@@ -21,16 +21,66 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Border Background="{StaticResource SurfaceBrush}" CornerRadius="20" Padding="15,8">
+            <Border Background="{StaticResource SurfaceBrush}" CornerRadius="20" Padding="15,8" BorderThickness="1" BorderBrush="Transparent">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFocused, ElementName=SearchBox}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="🔍" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{StaticResource TextDimBrush}"/>
-                    <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                             Background="Transparent" BorderThickness="0" Foreground="White"
-                             VerticalAlignment="Center" CaretBrush="White"/>
+
+                    <Grid Grid.Column="1">
+                        <TextBox x:Name="SearchBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="Transparent" BorderThickness="0" Foreground="White"
+                                 VerticalAlignment="Center" CaretBrush="White"
+                                 AutomationProperties.Name="Search tracks"/>
+
+                        <TextBlock Text="Search for tracks..." IsHitTestVisible="False" VerticalAlignment="Center"
+                                   Foreground="{StaticResource TextDimBrush}" Margin="2,0,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Text.Length, ElementName=SearchBox}" Value="0"/>
+                                                <Condition Binding="{Binding IsFocused, ElementName=SearchBox}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+
+                    <Button Grid.Column="2" Content="×" Command="{Binding ClearSearchCommand}"
+                            Width="24" Height="24"
+                            AutomationProperties.Name="Clear search" ToolTip="Clear search">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource ListIconButton}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SearchText}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SearchText}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </Border>
 
@@ -52,10 +102,15 @@
             </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="#" Width="40">
+                    <GridViewColumn Header="#" Width="48">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="▶" Foreground="{StaticResource TextDimBrush}" Cursor="Hand" MouseLeftButtonDown="PlayItem_Click"/>
+                                <Button Content="▶"
+                                        Style="{StaticResource ListIconButton}"
+                                        Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"
+                                        AutomationProperties.Name="Play track"
+                                        ToolTip="Play track"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
