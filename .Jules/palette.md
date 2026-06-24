@@ -1,0 +1,3 @@
+## 2025-05-15 - Accessible List Actions and Search UX
+**Learning:** In WPF applications, using `TextBlock` with mouse events for interactive icons (like 'Play' buttons in lists) prevents keyboard focus and screen reader accessibility. Search bars benefit significantly from clear buttons and persistent placeholder text that doesn't disappear immediately on focus if empty.
+**Action:** Always use `Button` with custom templates for list actions, ensuring `AutomationProperties.Name` and `ToolTip` are set. Implement search placeholders using overlay `TextBlock`s with `DataTriggers` on `Text.Length`.
