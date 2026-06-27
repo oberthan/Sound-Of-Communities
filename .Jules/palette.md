@@ -1,0 +1,3 @@
+## 2026-06-27 - [WPF Search Bar Placeholder & Clear Button]
+**Learning:** In WPF, a robust search bar experience can be achieved without code-behind by using a 3-column Grid inside a Border. Placeholder text should be an overlay TextBlock with 'IsHitTestVisible="False"' to allow focus on the underlying TextBox. Visibility triggers for both placeholders and clear buttons must account for both null ({x:Null}) and empty string ("") states of the TextBox.Text property.
+**Action:** Use separate DataTriggers for {x:Null} and "" to manage visibility of overlay elements like placeholders or clear buttons in WPF search bars.
